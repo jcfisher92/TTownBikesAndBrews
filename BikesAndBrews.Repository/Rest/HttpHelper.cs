@@ -4,6 +4,7 @@
 
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,21 @@ namespace BikesAndBrews.Repository.Rest
         }
 
         /// <summary>
+        /// Makes an HTTP PUT request to the given controller with the given object as the body.
+        /// Returns the deserialized response content.
+        /// </summary>
+        public async Task<TResult> PutAsync<TRequest, TResult>(string controller, TRequest body)
+        {
+            using (var client = BaseClient())
+            {
+                var response = await client.PutAsync(controller, new JsonStringContent(body));
+                string json = await response.Content.ReadAsStringAsync();
+                TResult obj = JsonConvert.DeserializeObject<TResult>(json);
+                return obj;
+            }
+        }
+
+        /// <summary>
         /// Makes an HTTP POST request to the given controller with the given object as the body.
         /// Returns the deserialized response content.
         /// </summary>
@@ -58,11 +74,14 @@ namespace BikesAndBrews.Repository.Rest
         /// Makes an HTTP DELETE request to the given controller and includes all the given
         /// object's properties as URL parameters. Returns the deserialized response content.
         /// </summary>
-        public async Task DeleteAsync(string controller, int objectId)
+        public async Task<int> DeleteAsync(string controller, int objectId)
         {
             using (var client = BaseClient())
             {
-                await client.DeleteAsync($"{controller}/{objectId}");
+                var response = await client.DeleteAsync($"{controller}/{objectId}");
+                string json = await response.Content.ReadAsStringAsync();
+                //TResult obj = JsonConvert.DeserializeObject<TResult>(json); Need to see what comes back with this.
+                return 1;
             }
         }
 

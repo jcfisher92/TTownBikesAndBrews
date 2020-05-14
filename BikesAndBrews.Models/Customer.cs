@@ -19,10 +19,7 @@ namespace BikesAndBrews.Models
         public string LastName { get; set; }
         public string  Phone { get; set; }
         public string Email { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string ZipCode { get; set; }
-
+        
         public List<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
     }
 }
